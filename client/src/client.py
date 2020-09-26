@@ -1,7 +1,7 @@
 import os
 import requests
 from http import HTTPStatus
-from web3.main import HexBytes
+from hexbytes import HexBytes
 from web3.datastructures import AttributeDict
 
 
