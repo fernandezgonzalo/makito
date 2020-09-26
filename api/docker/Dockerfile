@@ -13,5 +13,5 @@ COPY --from=builder /install /usr/local
 COPY src /project                                                                                                         
 RUN apk --no-cache add libpq                                                                                                  
 WORKDIR /project
-ENTRYPOINT ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "app:app"]
+ENTRYPOINT ["uvicorn", "--host", "0.0.0.0", "--port", "8080", "app:app"]
 #CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app", "--log-level", "info", "--access-logfile", "-", "--error-logfile", "-"]
