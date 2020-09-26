@@ -76,7 +76,7 @@ if MODE == "DEBUG":
 elif MODE == 'TESTING':
     db = SqliteDatabase(':memory:')
 else:
-    db = PostgresqlDatabase(os.environ.get("POSTGRES_DATABASE", 'postgres'), user=os.environ.get("POSTGRES_USER", "postgres"), password=os.environ.get("POSTGRES_PASSWORD", "example"), host=os.environ.get("POSTGRES_HOST", "localhost"), port=os.environ.get("POSTGRES_HOST", 5435))
+    db = PostgresqlDatabase(os.environ.get("POSTGRES_DATABASE", 'postgres'), user=os.environ.get("POSTGRES_USER", "postgres"), password=os.environ.get("POSTGRES_PASSWORD", "example"), host=os.environ.get("POSTGRES_HOST", "localhost"), port=os.environ.get("POSTGRES_PORT", 5435))
 
 # Configure our proxy to use the db we specified in config.
 database_proxy.initialize(db)
