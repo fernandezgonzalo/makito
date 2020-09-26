@@ -1,0 +1,6 @@
+fastapi
+pydantic
+peewee
+psycopg2-binary
+uvicorn
+gunicorn

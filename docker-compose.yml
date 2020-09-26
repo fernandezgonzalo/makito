@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: db-node
+    command: -p 5435
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5435:5435
+
+  api:
+    restart: always
+    build:
+      context: api
+      dockerfile: docker/Dockerfile
+    image: api
+    container_name: api
+    volumes:
+      - ./api/src/:/project/
+    ports:
+      - 5000:5000
+    links:
+      - db:postgres
+    depends_on: 
+      - db
+    env_file:
+      - .env
