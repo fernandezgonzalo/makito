@@ -2,6 +2,7 @@ import os
 import requests
 from http import HTTPStatus
 from web3.main import HexBytes
+from web3.datastructures import AttributeDict
 
 
 def patch_web3(w3_instance, makito_client):
@@ -52,10 +53,10 @@ class MakitoClient():
         else:
             block = response.json()
 
-            output_block = {
-                "blockNumber": block.get("block_number"),
-                "blockHash": block.get("block_hash")
-            }
+            output_block = AttributeDict({
+                "number": block.get("block_number"),
+                "hash": HexBytes(block.get("block_hash"))
+            })
 
         return output_block
 
