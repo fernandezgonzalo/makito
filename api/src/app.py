@@ -4,6 +4,7 @@ from typing import List, Optional
 from models import Log
 
 from models import db, Log as LogModel, Block as BlockModel
+from models import clean_database
 
 
 class Log(BaseModel):
@@ -48,7 +49,7 @@ def get_block(block: str, response: Response):
 
 
 @app.post("/add_blocks", response_model=Blocks)
-def add_logs(data: Blocks):
+def add_blocks(data: Blocks):
     with db.atomic():
         for block in data.blocks:
             b = BlockModel.upsert(block.block_number, block.block_hash)
@@ -85,4 +86,9 @@ def get_blocks(filters: Filters):
         output_logs.append(l)
 
     return output_logs
+
+@app.post("/clean_database")
+def clean_makito():
+    clean_database()
+    return {"message": "success"}
 

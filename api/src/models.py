@@ -66,7 +66,9 @@ class Log(Model):
         database = database_proxy
 
     
-
+def clean_database():
+    Block.truncate_table(restart_identity=True, cascade=True)
+    Log.truncate_table(restart_identity=True, cascade=True)
 
 
 
