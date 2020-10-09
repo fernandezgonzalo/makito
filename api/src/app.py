@@ -71,7 +71,7 @@ def get_blocks(filters: Filters):
     logs = LogModel.select().where(
             LogModel.block.number >= filters.fromBlock,
             LogModel.block.number <= filters.toBlock
-        ).join(BlockModel).execute()
+        ).join(BlockModel).order_by(LogModel.id).execute()
 
     output_logs = []
     for log in logs:
