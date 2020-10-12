@@ -56,7 +56,7 @@ class Block(Model):
         return block
 
 class Log(Model):
-    block = ForeignKeyField(Block, backref="logs")
+    block = ForeignKeyField(Block, backref="logs", on_delete='CASCADE')
     address = CharField(index=True, null=True)
     data = TextField(null=True)
     topics = TextField(null=True)

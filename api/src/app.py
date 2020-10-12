@@ -32,16 +32,19 @@ def get_block(block: str, response: Response):
 def add_blocks(data: Blocks):
     with db.atomic():
         for block in data.blocks:
-            b = BlockModel.upsert(block.block_number, block.block_hash)
-            if block.logs:
-                for log in block.logs:
-                    l = LogModel()
-                    l.address = log.address
-                    l.data = log.data
-                    l.topics = ",".join(log.topics)
-                    l.transaction_hash = log.transaction_hash
-                    l.block = b
-                    l.save()
+            if block.logs is None or block.logs == []:
+                BlockModel.delete().where(BlockModel.number == block.block_number).execute()
+            else:
+                b = BlockModel.upsert(block.block_number, block.block_hash)
+                if block.logs:
+                    for log in block.logs:
+                        l = LogModel()
+                        l.address = log.address
+                        l.data = log.data
+                        l.topics = ",".join(log.topics)
+                        l.transaction_hash = log.transaction_hash
+                        l.block = b
+                        l.save()
 
     return data
 
