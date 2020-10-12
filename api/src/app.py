@@ -1,34 +1,14 @@
-from fastapi import FastAPI, Response, status
-from pydantic import BaseModel
-from typing import List, Optional
-from models import Log
+from fastapi import FastAPI
+from fastapi import Response
+from fastapi import status
 
-from models import db, Log as LogModel, Block as BlockModel
+from models import db
+from models import Log as LogModel
+from models import Block as BlockModel
 from models import clean_database
 
-
-class Log(BaseModel):
-    address: str
-    data: str
-    topics: List[str]
-    transaction_hash: str
-
-
-class Block(BaseModel):
-    block_number: int
-    block_hash: str
-    logs: Optional[List[Log]] = None
-
-
-class Blocks(BaseModel):
-    blocks: List[Block]
-
-
-class Filters(BaseModel):
-    fromBlock: int
-    toBlock: int
-    address: List[str]
-    topics: Optional[List[str]]
+from schema import Blocks
+from schema import Filters
 
 
 app = FastAPI()
