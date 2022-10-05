@@ -59,11 +59,27 @@ class Log(Model):
     block = ForeignKeyField(Block, backref="logs", on_delete='CASCADE')
     address = CharField(index=True, null=True)
     data = TextField(null=True)
-    topics = TextField(null=True)
+    topic0 = TextField(null=False, index=True)
+    topic1 = CharField(null=True, index=True)
+    topic2 = CharField(null=True, index=True)
+    topic3 = CharField(null=True, index=True)
     transaction_hash = CharField(null=True)
 
     class Meta:
         database = database_proxy
+
+    @property
+    def topics(self):
+        topics = []
+        topics.append(self.topic0)
+        if self.topic1:
+            topics.append(self.topic1)
+        if self.topic2:
+            topics.append(self.topic2)
+        if self.topic3:
+            topics.append(self.topic3)
+
+        return topics
 
     
 def clean_database():

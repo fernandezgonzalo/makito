@@ -22,5 +22,5 @@ class Blocks(BaseModel):
 class Filters(BaseModel):
     fromBlock: int
     toBlock: int
-    address: List[str]
+    address: Optional[List[str]]
     topics: Optional[List[str]]

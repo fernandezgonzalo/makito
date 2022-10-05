@@ -10,10 +10,10 @@ class MakitoClient():
         self.host = host
 
     def normalize_filter(self, filters):
-        if filters.get("topics") is None:
-            filters["topics"] = []
-        if filters.get("address") is None:
-            filters["address"] = []
+        # if filters.get("topics") is None:
+        #     filters["topics"] = []
+        # if filters.get("address") is None:
+        #     filters["address"] = []
 
         return filters
 
@@ -34,7 +34,7 @@ class MakitoClient():
         return logs
 
     def get_block(self, block_identifier):
-        endpoint = "get_block/"
+        endpoint = "get_block"
         url = requests.compat.urljoin(self.host, endpoint)
         
         if isinstance(block_identifier, int):
@@ -56,7 +56,7 @@ class MakitoClient():
 
     def get_logs(self, filters):
         normalized_filters = self.normalize_filter(filters)
-        endpoint = "get_logs/"
+        endpoint = "get_logs"
         url = requests.compat.urljoin(self.host, endpoint)
         logs = requests.get(url, json=filters).json()
         normalized_log = self.normalize_log(logs)
@@ -113,14 +113,14 @@ class MakitoClient():
 }
         """
 
-        endpoint = "add_blocks/"
+        endpoint = "add_blocks"
         url = requests.compat.urljoin(self.host, endpoint)
         response = requests.post(url, json=blocks)
 
         return response
 
     def delete_data(self):
-        endpoint = "clean_database/"
+        endpoint = "clean_database"
         url = requests.compat.urljoin(self.host, endpoint)
         response = requests.post(url)
 
