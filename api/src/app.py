@@ -32,29 +32,40 @@ def get_block(block: str, response: Response):
 def add_blocks(data: Blocks):
     with db.atomic():
         for block in data.blocks:
-            if block.logs is None or block.logs == []:
-                BlockModel.delete().where(BlockModel.number == block.block_number).execute()
-            else:
-                b = BlockModel.upsert(block.block_number, block.block_hash)
-                if block.logs:
-                    for log in block.logs:
-                        l = LogModel()
-                        l.address = log.address
-                        l.data = log.data
-                        l.topics = ",".join(log.topics)
-                        l.transaction_hash = log.transaction_hash
-                        l.block = b
-                        l.save()
+            b = BlockModel.upsert(block.block_number, block.block_hash)
+            if block.logs:
+                for log in block.logs:
+                    l = LogModel()
+                    l.address = log.address
+                    l.data = log.data
+                    
+                    for i, topic in enumerate(log.topics):
+                        field = "topic{num}".format(num=i)
+                        setattr(l, field, topic)
+
+                    l.transaction_hash = log.transaction_hash
+                    l.block = b
+                    l.save()
 
     return data
 
 
 @app.get("/get_logs")
 def get_blocks(filters: Filters):
-    logs = LogModel.select().where(
+    query = LogModel.select()
+    
+    if filters.address:
+        query = query.where(LogModel.address << filters.address)
+    if filters.topics:
+        query = query.where(LogModel.topic0 << filters.topics)
+
+    query = query.where(
             LogModel.block.number >= filters.fromBlock,
             LogModel.block.number <= filters.toBlock
-        ).join(BlockModel).order_by(LogModel.id).execute()
+    )
+
+    query = query.join(BlockModel).order_by(LogModel.id)
+    logs = query.execute()
 
     output_logs = []
     for log in logs:
@@ -63,7 +74,7 @@ def get_blocks(filters: Filters):
             "block_hash": log.block.hash,
             "address": log.address,
             "data": log.data,
-            "topics": log.topics.split(","),
+            "topics": log.topics,
             "transaction_hash": log.transaction_hash
         }
         output_logs.append(l)
