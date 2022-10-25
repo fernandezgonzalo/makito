@@ -1,11 +1,5 @@
 version: '3.1'
 
-networks:
-  rcn:
-    external:
-      name: rcn
-    driver: bridge
-
 services:
   db:
     image: postgres
@@ -16,16 +10,13 @@ services:
       POSTGRES_PASSWORD: example
     ports:
       - 5435:5435
-    networks:
-      - rcn
     volumes:
       - db-data:/var/lib/postgresql/data
 
   api:
     restart: always
     build:
-      context: api
-      dockerfile: docker/Dockerfile
+      dockerfile: api/docker/Dockerfile
     image: api-makito
     container_name: api-makito
     volumes:
@@ -38,8 +29,6 @@ services:
       - db
     env_file:
       - .env
-    networks:
-      - rcn
 
 volumes:
   db-data:
